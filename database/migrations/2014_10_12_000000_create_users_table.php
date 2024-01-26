@@ -1,5 +1,6 @@
 <?php
 
+use Egulias\EmailValidator\Parser\Comment;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('image')->nullable();
             $table->rememberToken();
+            $table->tinyInteger('status')->default(0)->Comment('0=>inactive,1=>active');
             $table->timestamps();
             $table->softDeletes();
         });
