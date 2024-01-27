@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\auth;
 
 use App\Models\User;
+use App\Traits\GetGender;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends BaseController
 {
+    use GetGender;
     public function index()
     {
         return view("signup");
@@ -74,28 +76,6 @@ class AuthController extends BaseController
             DB::rollback();
             logger($e->getMessage() . ' -- ' . $e->getLine() . ' -- ' . $e->getFile());
             return $this->responseJson(false, 500, 'Something went wrong', []);
-        }
-    }
-    public function getGender($name)
-    {
-        // $api_key = config('service.gender_api_key'); // Replace with your Gender-API key
-        $api_key = '8caf901a695c1567907a99d5ed7139c5be3d718f70bfb66eeaf27f3fe4bd21f9'; // Replace with your Gender-API key
-
-        $api_url = "https://gender-api.com/get?name=$name&key=$api_key";
-
-        $response = file_get_contents($api_url);
-
-        if ($response === false) {
-            // Handle error
-            return 'Unknown';
-        }
-
-        $data = json_decode($response, true);
-
-        if ($data['gender'] === 'unknown') {
-            return 'Unknown';
-        } else {
-            return $data['gender'];
         }
     }
     public function update(Request $request)
